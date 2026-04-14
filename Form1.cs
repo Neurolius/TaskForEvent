@@ -1,12 +1,16 @@
 using System.DirectoryServices.ActiveDirectory;
+using TaskForEvent.Objects;
 
 namespace TaskForEvent
 {
     public partial class Form1 : Form
     {
+        MyRectangle myRect;
+
         public Form1()
         {
             InitializeComponent();
+            myRect = new MyRectangle(0, 0, 0);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -15,9 +19,7 @@ namespace TaskForEvent
 
             g.Clear(Color.White);
 
-            g.DrawRectangle(new Pen(Color.Red), 200, 100, 50, 30);
-            g.FillRectangle(new SolidBrush(Color.Yellow), 200, 100, 50, 30);
-            g.DrawRectangle(new Pen(Color.Red, 2), 200, 100, 50, 30);
+            myRect.Render(g);
         }
     }
 }
