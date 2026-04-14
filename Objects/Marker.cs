@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Text;
 
 namespace TaskForEvent.Objects
@@ -14,5 +15,13 @@ namespace TaskForEvent.Objects
             g.DrawEllipse(new Pen(Color.Red, 2), -6, -6, 12, 12);
             g.DrawEllipse(new Pen(Color.Red, 2), -10, -10, 20, 20);
         }
+
+        public override GraphicsPath GetGraphicsPath()
+        {
+            var path = base.GetGraphicsPath();
+            path.AddEllipse(-3, -3, 6, 6);
+            return path;
+        }
+
     }
 }

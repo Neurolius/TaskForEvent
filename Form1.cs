@@ -15,6 +15,18 @@ namespace TaskForEvent
             InitializeComponent();
 
             player = new Player(pictureBox1.Width / 2, pictureBox1.Height / 2, 0);
+
+            player.OnOverlap += (p, obj) =>
+            {
+                txtLog.Text = $"[{DateTime.Now:HH:mm:ss:ff}] Игрок пересекся с {obj}\n" + txtLog.Text;
+            };
+
+            player.OnMarkerOverlap += (m) =>
+            {
+                objects.Remove(m);
+                marker = null;
+            };
+
             marker = new Marker(pictureBox1.Width / 2 + 50, pictureBox1.Height / 2 + 50, 0);
             objects.Add(player);
             objects.Add(marker);
@@ -29,6 +41,15 @@ namespace TaskForEvent
 
             g.Clear(Color.White);
 
+            foreach (var obj in objects.ToList())
+            {
+                if (obj != player && player.Overlaps(obj, g))
+                {
+                    player.Overlap(obj);
+                    obj.Overlap(player);
+                }
+            }
+
             foreach (var obj in objects)
             {
                 g.Transform = obj.GetTransform();
@@ -38,21 +59,30 @@ namespace TaskForEvent
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            float dx = marker.X - player.X;
-            float dy = marker.Y - player.Y;
+            if (marker != null)
+            {
+                float dx = marker.X - player.X;
+                float dy = marker.Y - player.Y;
 
-            float length = MathF.Sqrt(dx * dx + dy * dy);
-            dx /= length;
-            dy /= length;
+                float length = MathF.Sqrt(dx * dx + dy * dy);
+                dx /= length;
+                dy /= length;
 
-            player.X += dx * 2;
-            player.Y += dy * 2;
+                player.X += dx * 2;
+                player.Y += dy * 2;
+            }
 
             pictureBox1.Invalidate();
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            if (marker == null)
+            {
+                marker = new Marker(0, 0, 0);
+                objects.Add(marker);
+            }
+
             marker.X = e.X;
             marker.Y = e.Y;
         }

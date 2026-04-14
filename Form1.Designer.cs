@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             timer1 = new System.Windows.Forms.Timer(components);
+            txtLog = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -50,11 +51,20 @@
             timer1.Interval = 30;
             timer1.Tick += timer1_Tick;
             // 
+            // txtLog
+            // 
+            txtLog.Location = new Point(790, 3);
+            txtLog.Name = "txtLog";
+            txtLog.Size = new Size(232, 565);
+            txtLog.TabIndex = 1;
+            txtLog.Text = "";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(787, 631);
+            ClientSize = new Size(1028, 631);
+            Controls.Add(txtLog);
             Controls.Add(pictureBox1);
             Name = "Form1";
             Text = "Form1";
@@ -66,5 +76,6 @@
 
         private PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
+        private RichTextBox txtLog;
     }
 }
