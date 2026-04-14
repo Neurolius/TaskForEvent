@@ -9,6 +9,7 @@ namespace TaskForEvent.Objects
     {
 
         public Action<Marker> OnMarkerOverlap;
+        public float vX, vY;
 
         public Player(float x, float y, float angle) : base(x, y, angle) { }
 
