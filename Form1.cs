@@ -10,7 +10,7 @@ namespace TaskForEvent
         public Form1()
         {
             InitializeComponent();
-            myRect = new MyRectangle(0, 0, 0);
+            myRect = new MyRectangle(100, 100, 45);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -18,6 +18,10 @@ namespace TaskForEvent
             var g = e.Graphics;
 
             g.Clear(Color.White);
+
+
+            g.Transform = myRect.GetTransform();
+
 
             myRect.Render(g);
         }
