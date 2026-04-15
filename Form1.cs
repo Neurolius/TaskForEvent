@@ -31,19 +31,28 @@ namespace TaskForEvent
                 objects.Remove(m);
                 marker = null;
             };
-            
+            var rnd = new Random();
             foreach (var target in targets)
             {
                 target.OnPlayerOverlap += (p) =>
                 {
                     if (p is Player)
                     {
-                        var rnd = new Random();
                         target.X = rnd.Next(20, pictureBox1.Width - 20);
                         target.Y = rnd.Next(20, pictureBox1.Height - 20);
+                        target.size = rnd.Next(50, 80);
                         globalScore+=target.score;
                         Score.Text = "Счет: " + globalScore.ToString();
                     }
+                };
+
+                target.OnSizeZero += (t) =>
+                {
+                    t.Respawn(
+                        rnd.Next(20, pictureBox1.Width - 20),
+                        rnd.Next(20, pictureBox1.Height - 20),
+                        rnd.Next(50,80)
+                    );
                 };
             }
 
@@ -102,6 +111,9 @@ namespace TaskForEvent
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            foreach (var target in targets)
+                target.updateSize();
+
             pictureBox1.Invalidate();
         }
 

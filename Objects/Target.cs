@@ -7,20 +7,45 @@ namespace TaskForEvent.Objects
 {
     internal class Target : BaseObject
     {
-        public Action<Player> OnPlayerOverlap;
+        public Action<Player>? OnPlayerOverlap;
+        public event Action<Target>? OnSizeZero;
         public int score = 1;
+        public float size = 50;
+        float shrinkSize = 0.5f;
 
         public Target(float x, float y, float angle) : base(x,y,angle) { }
 
         public override void Render(Graphics g)
         {
-            g.FillEllipse(new SolidBrush(Color.Green), -50, -50, 25, 25);
+            using var brush = new SolidBrush(Color.Green);
+            g.FillEllipse(brush, -size / 2, -size / 2, size, size);
+        }
+
+        public void updateSize()
+        {
+            if (size <= 0)
+                return;
+
+            size -= shrinkSize;
+
+            if (size <= 0)
+            {
+                size = 0;
+                OnSizeZero?.Invoke(this);
+            }
+        }
+
+        public void Respawn(float x, float y, float newSize=50)
+        {
+            X = x;
+            Y = y;
+            size = newSize;
         }
 
         public override GraphicsPath GetGraphicsPath()
         {
             var path = base.GetGraphicsPath();
-            path.AddEllipse(-50, -50, 25, 25);
+            path.AddEllipse(-size / 2, -size / 2, size, size);
             return path;
         }
 
@@ -28,10 +53,7 @@ namespace TaskForEvent.Objects
         {
             base.Overlap(obj);
 
-            if (obj is Player)
-            {
-                OnPlayerOverlap(obj as Player);
-            }
+            OnPlayerOverlap?.Invoke(obj as Player);
         }
     }
 }
