@@ -23,9 +23,6 @@ namespace TaskForEvent.Objects
 
         public void updateSize()
         {
-            if (size <= 0)
-                return;
-
             size -= shrinkSize;
 
             if (size <= 0)
