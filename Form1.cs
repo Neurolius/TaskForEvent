@@ -9,17 +9,42 @@ namespace TaskForEvent
         List<BaseObject> objects = new();
         Player player;
         Marker marker;
-        List<Target> targets = new();
         int globalScore = 0;
+        private Random rnd = new Random();
+
+        private void AddNewTarget()
+        {
+            var target = new Target(
+                rnd.Next(20, pictureBox1.Width - 20),
+                rnd.Next(20, pictureBox1.Height - 20),
+                0
+            );
+
+            target.size = rnd.Next(50, 80);
+
+            target.OnPlayerOverlap += (p) =>
+            {
+                objects.Remove(target);   
+                AddNewTarget();           
+
+                globalScore += target.score;
+                Score.Text = "Счет: " + globalScore;
+            };
+
+            target.OnSizeZero += (t) =>
+            {
+                objects.Remove(t);
+                AddNewTarget();
+            };
+
+            objects.Add(target);
+        }
 
         public Form1()
         {
             InitializeComponent();
 
             player = new Player(pictureBox1.Width / 2, pictureBox1.Height / 2, 0);
-            targets = new List<Target>();
-            targets.Add(new Target(pictureBox1.Width / 2, pictureBox1.Height / 2 + 50, 0));
-            targets.Add(new Target(pictureBox1.Width / 2, pictureBox1.Height / 2, 0));
 
             player.OnOverlap += (p, obj) =>
             {
@@ -31,37 +56,14 @@ namespace TaskForEvent
                 objects.Remove(m);
                 marker = null;
             };
-            var rnd = new Random();
-            foreach (var target in targets)
-            {
-                target.OnPlayerOverlap += (p) =>
-                {
-                    if (p is Player)
-                    {
-                        target.X = rnd.Next(20, pictureBox1.Width - 20);
-                        target.Y = rnd.Next(20, pictureBox1.Height - 20);
-                        target.size = rnd.Next(50, 80);
-                        globalScore+=target.score;
-                        Score.Text = "Счет: " + globalScore.ToString();
-                    }
-                };
 
-                target.OnSizeZero += (t) =>
-                {
-                    t.Respawn(
-                        rnd.Next(20, pictureBox1.Width - 20),
-                        rnd.Next(20, pictureBox1.Height - 20),
-                        rnd.Next(50,80)
-                    );
-                };
-            }
+            AddNewTarget();
+            AddNewTarget();
 
             marker = new Marker(pictureBox1.Width / 2 + 50, pictureBox1.Height / 2 + 50, 0);
-            
 
             objects.Add(player);
             objects.Add(marker);
-            objects.AddRange(targets);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -79,7 +81,7 @@ namespace TaskForEvent
                 }
             }
 
-            foreach (var obj in objects)
+            foreach (var obj in objects.ToList())
             {
                 g.Transform = obj.GetTransform();
                 obj.Render(g);
@@ -111,9 +113,6 @@ namespace TaskForEvent
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            foreach (var target in targets)
-                target.updateSize();
-
             pictureBox1.Invalidate();
         }
 

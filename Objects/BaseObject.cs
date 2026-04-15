@@ -20,6 +20,8 @@ namespace TaskForEvent.Objects
             Angle = angle;
         }
 
+        public virtual void updateSize() { }
+
         public virtual void Render(Graphics g)
         {
            

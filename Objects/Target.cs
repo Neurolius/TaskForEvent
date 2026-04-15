@@ -19,9 +19,10 @@ namespace TaskForEvent.Objects
         {
             using var brush = new SolidBrush(Color.Green);
             g.FillEllipse(brush, -size / 2, -size / 2, size, size);
+            updateSize();
         }
 
-        public void updateSize()
+        public override void updateSize()
         {
             size -= shrinkSize;
 
@@ -30,13 +31,6 @@ namespace TaskForEvent.Objects
                 size = 0;
                 OnSizeZero?.Invoke(this);
             }
-        }
-
-        public void Respawn(float x, float y, float newSize=50)
-        {
-            X = x;
-            Y = y;
-            size = newSize;
         }
 
         public override GraphicsPath GetGraphicsPath()
