@@ -9,12 +9,15 @@ namespace TaskForEvent
         List<BaseObject> objects = new();
         Player player;
         Marker marker;
+        Target target;
+
 
         public Form1()
         {
             InitializeComponent();
 
             player = new Player(pictureBox1.Width / 2, pictureBox1.Height / 2, 0);
+            target = new Target(pictureBox1.Width / 2, pictureBox1.Height / 2 + 50, 0);
 
             player.OnOverlap += (p, obj) =>
             {
@@ -27,12 +30,22 @@ namespace TaskForEvent
                 marker = null;
             };
 
+            target.OnPlayerOverlap += (p) =>
+            {
+                if (p is Player)
+                {
+                    var rnd = new Random();
+                    target.X = rnd.Next(20, pictureBox1.Width - 20);
+                    target.Y = rnd.Next(20, pictureBox1.Height - 20);
+                }
+            };
+
             marker = new Marker(pictureBox1.Width / 2 + 50, pictureBox1.Height / 2 + 50, 0);
+            
+
             objects.Add(player);
             objects.Add(marker);
-
-            objects.Add(new MyRectangle(50, 50, 0));
-            objects.Add(new MyRectangle(100, 100, 45));
+            objects.Add(target);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
