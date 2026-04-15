@@ -9,15 +9,17 @@ namespace TaskForEvent
         List<BaseObject> objects = new();
         Player player;
         Marker marker;
-        Target target;
-
+        List<Target> targets = new();
+        int globalScore = 0;
 
         public Form1()
         {
             InitializeComponent();
 
             player = new Player(pictureBox1.Width / 2, pictureBox1.Height / 2, 0);
-            target = new Target(pictureBox1.Width / 2, pictureBox1.Height / 2 + 50, 0);
+            targets = new List<Target>();
+            targets.Add(new Target(pictureBox1.Width / 2, pictureBox1.Height / 2 + 50, 0));
+            targets.Add(new Target(pictureBox1.Width / 2, pictureBox1.Height / 2, 0));
 
             player.OnOverlap += (p, obj) =>
             {
@@ -29,23 +31,28 @@ namespace TaskForEvent
                 objects.Remove(m);
                 marker = null;
             };
-
-            target.OnPlayerOverlap += (p) =>
+            
+            foreach (var target in targets)
             {
-                if (p is Player)
+                target.OnPlayerOverlap += (p) =>
                 {
-                    var rnd = new Random();
-                    target.X = rnd.Next(20, pictureBox1.Width - 20);
-                    target.Y = rnd.Next(20, pictureBox1.Height - 20);
-                }
-            };
+                    if (p is Player)
+                    {
+                        var rnd = new Random();
+                        target.X = rnd.Next(20, pictureBox1.Width - 20);
+                        target.Y = rnd.Next(20, pictureBox1.Height - 20);
+                        globalScore+=target.score;
+                        Score.Text = "Счет: " + globalScore.ToString();
+                    }
+                };
+            }
 
             marker = new Marker(pictureBox1.Width / 2 + 50, pictureBox1.Height / 2 + 50, 0);
             
 
             objects.Add(player);
             objects.Add(marker);
-            objects.Add(target);
+            objects.AddRange(targets);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)

@@ -32,6 +32,7 @@
             pictureBox1 = new PictureBox();
             timer1 = new System.Windows.Forms.Timer(components);
             txtLog = new RichTextBox();
+            Score = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -59,17 +60,28 @@
             txtLog.TabIndex = 1;
             txtLog.Text = "";
             // 
+            // Score
+            // 
+            Score.AutoSize = true;
+            Score.Location = new Point(720, 12);
+            Score.Name = "Score";
+            Score.Size = new Size(48, 15);
+            Score.TabIndex = 2;
+            Score.Text = "Счет:  0";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1028, 631);
+            Controls.Add(Score);
             Controls.Add(txtLog);
             Controls.Add(pictureBox1);
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -77,5 +89,6 @@
         private PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
         private RichTextBox txtLog;
+        private Label Score;
     }
 }

@@ -8,6 +8,7 @@ namespace TaskForEvent.Objects
     internal class Target : BaseObject
     {
         public Action<Player> OnPlayerOverlap;
+        public int score = 1;
 
         public Target(float x, float y, float angle) : base(x,y,angle) { }
 
